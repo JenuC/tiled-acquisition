@@ -5,7 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "humanize>=4.13.0",
     "numpy>=2.2.4",
+    "pandas>=2.3.2",
     "pymmcore-plus>=0.13.5",
     "pyometiff>=1.1.4",
     "useq-schema>=0.7.1",
