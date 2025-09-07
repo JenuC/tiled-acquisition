@@ -46,6 +46,33 @@ def parse_args():
         choices=(256, 512, 1024),
         help="Scan resolution",
     )
+
+    parser.add_argument(
+        "--objective",
+        metavar="OBJECTIVE",
+        default="20X 0.75 Nikon",
+        choices=("60X W1.2 Nikon", 
+		"40X W1.2 Nikon",
+		"60X O1.4 Nikon",
+		"20X 0.75 Nikon",
+		"10X 0.5 Nikon"),
+	help="Objective setting",
+    )
+    parser.add_argument(
+        "--filter",
+        metavar="FILTER",
+        default="680SP",
+        choices=("680SP", "568LP", "615-20", "542-27", "520-35", "370-10", "457-50", "445-20", "395-11", "BLANK"),
+	help="Filter wheel setting",
+    )
+    parser.add_argument(
+        "--zoom",
+        metavar="ZOOM",
+	type=float,
+        default=1,
+	help="Galvo zoom setting",
+    )
+
     parser.add_argument(
         "--no-sync-check", action="store_true", help="Disable check for SYNC signal"
     )
@@ -72,11 +99,11 @@ def setup_hardware(args):
 
     if args.config:
         mmc.setConfig("Channels", "PhotonCounting Only")
-        mmc.setConfig("FilterWheel", "680SP")
-        mmc.setConfig("Lens", "20X 0.75 Nikon")
+        mmc.setConfig("FilterWheel", args.filter)
+        mmc.setConfig("Lens", args.objective)
         mmc.setConfig("Resolution (pixels)", str(args.resolution))
         mmc.setProperty("NIDAQAO-Dev2/ao1", "Voltage", args.eom)
-        mmc.setProperty("OSc-LSM", "LSM-ZoomFactor", 2)
+        mmc.setProperty("OSc-LSM", "LSM-ZoomFactor", args.zoom)
         mmc.setProperty("DCCModule2", "C3_GainHV", args.pmtgain)
         if args.no_sync_check:
             mmc.setConfig("FLIMCheckSync", "No")
